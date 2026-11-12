@@ -1,0 +1,589 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GoldCoin Dealer Calling</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span class="logo-icon">GC</span>
+            <span>GoldCoin <small>DEALER OPERATIONS</small></span>
+        </div>
+
+        <a href="{% url 'dashboard' %}" class="nav active">
+            ▦ &nbsp; Calling Dashboard
+        </a>
+
+        <a href="{% url 'dealer_followups' %}" class="nav">
+            ☎ &nbsp; Dealer Follow-ups
+        </a>
+
+        <a href="{% url 'dashboard' %}" class="nav">
+            ▤ &nbsp; POD Tracking
+        </a>
+
+        <div class="sidebar-bottom">
+            <div class="avatar">
+                {{ request.user.username|first|upper }}
+            </div>
+
+            <div>
+                <b>{{ request.user.username }}</b>
+                <small>Operations team</small>
+            </div>
+
+            <a class="logout" href="{% url 'logout' %}">↗</a>
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header>
+            <div>
+                <div class="eyebrow">
+                    DEALER OPERATIONS / OVERVIEW
+                </div>
+
+                <h1>Calling Dashboard</h1>
+
+                <p class="sub">
+                    Track dealer outreach, call outcomes, and pending follow-ups.
+                </p>
+            </div>
+
+            <div class="header-actions">
+                <span class="live"><i></i> Live workspace</span>
+
+                <a class="btn light" href="{% url 'export_excel' %}">
+                    ↓ Export Excel
+                </a>
+            </div>
+        </header>
+
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+
+        <!-- Dashboard Statistics -->
+
+        <section class="stats">
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Total dealers</span>
+                    <span class="stat-icon purple">▤</span>
+                </div>
+
+                <strong>{{ stats.total }}</strong>
+                <small>Records in tracker</small>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Pending calls</span>
+                    <span class="stat-icon amber">◷</span>
+                </div>
+
+                <strong>{{ stats.pending }}</strong>
+                <small>Awaiting outreach</small>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Connected</span>
+                    <span class="stat-icon green">↗</span>
+                </div>
+
+                <strong>{{ stats.connected }}</strong>
+                <small>Dealer reached</small>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Completed</span>
+                    <span class="stat-icon blue">✓</span>
+                </div>
+
+                <strong>{{ stats.completed }}</strong>
+                <small>Call closed</small>
+            </div>
+
+        </section>
+
+
+        <!-- Follow-up Summary -->
+
+        <section class="stats">
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Pending Follow-ups</span>
+                    <span class="stat-icon amber">◷</span>
+                </div>
+
+                <strong>{{ followup_stats.pending }}</strong>
+                <small>Scheduled callbacks</small>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Today's Follow-ups</span>
+                    <span class="stat-icon blue">📅</span>
+                </div>
+
+                <strong>{{ followup_stats.today }}</strong>
+                <small>Callbacks due today</small>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Overdue Follow-ups</span>
+                    <span class="stat-icon purple">!</span>
+                </div>
+
+                <strong>{{ followup_stats.overdue }}</strong>
+                <small>Missed callbacks</small>
+            </div>
+
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Completed Follow-ups</span>
+                    <span class="stat-icon green">✓</span>
+                </div>
+
+                <strong>{{ followup_stats.completed }}</strong>
+                <small>Successfully followed up</small>
+            </div>
+
+        </section>
+
+
+        <!-- Dealer Follow-up Section -->
+
+        <section class="panel" id="followups">
+
+            <div class="panel-head">
+                <div>
+                    <h2>Dealer Follow-up Management</h2>
+
+                    <p>
+                        Monitor scheduled callbacks, pending discussions,
+                        and overdue dealer follow-ups.
+                    </p>
+                </div>
+
+                <a href="{% url 'dealer_followups' %}"
+                   class="btn primary">
+                    View All Follow-ups →
+                </a>
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>DEALER</th>
+                            <th>CONTACT</th>
+                            <th>FOLLOW-UP DATE</th>
+                            <th>TIME</th>
+                            <th>REMARKS</th>
+                            <th>STATUS</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for f in upcoming_followups %}
+
+                        <tr>
+
+                            <td>
+                                <div class="dealer">
+                                    <div class="dealer-avatar">
+                                        {{ f.dealer.dealer_name|first|upper }}
+                                    </div>
+
+                                    <div>
+                                        <b>{{ f.dealer.dealer_name }}</b>
+                                        <small>
+                                            {{ f.dealer.pod_number|default:"—" }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </td>
+
+
+                            <td>
+                                {% if f.dealer.phone %}
+                                    <a href="tel:{{ f.dealer.phone }}">
+                                        {{ f.dealer.phone }}
+                                    </a>
+                                {% else %}
+                                    <span class="muted">Not available</span>
+                                {% endif %}
+                            </td>
+
+
+                            <td>
+                                {{ f.followup_date|date:"d M Y" }}
+
+                                {% if f.followup_date < today %}
+                                    <span class="badge overdue">
+                                        Overdue
+                                    </span>
+                                {% elif f.followup_date == today %}
+                                    <span class="badge pending">
+                                        Today
+                                    </span>
+                                {% endif %}
+                            </td>
+
+
+                            <td>
+                                {{ f.followup_time|time:"h:i A" }}
+                            </td>
+
+
+                            <td>
+                                {{ f.remarks|default:"—" }}
+                            </td>
+
+
+                            <td>
+                                <span class="badge {{ f.status }}">
+                                    {{ f.get_status_display }}
+                                </span>
+                            </td>
+
+
+                            <td>
+
+                                {% if f.status == 'pending' %}
+
+                                <form method="post"
+                                      action="{% url 'complete_followup' f.id %}">
+
+                                    {% csrf_token %}
+
+                                    <button type="submit"
+                                            class="btn tiny primary">
+                                        ✓ Complete
+                                    </button>
+
+                                </form>
+
+                                {% else %}
+
+                                    <span class="muted">Completed</span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="7" class="empty">
+                                No upcoming follow-ups found.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Dealer Call Tracker -->
+
+        <section class="panel">
+
+            <div class="panel-head">
+
+                <div>
+                    <h2>Dealer Call Tracker</h2>
+
+                    <p>
+                        Update call status and schedule dealer follow-ups.
+                    </p>
+                </div>
+
+
+                <form method="post"
+                      action="{% url 'import_excel' %}"
+                      enctype="multipart/form-data"
+                      class="import-form">
+
+                    {% csrf_token %}
+
+                    <label class="btn light upload">
+                        ＋ Import Excel
+
+                        <input type="file"
+                               name="excel_file"
+                               accept=".xlsx,.xlsm,.xls"
+                               required
+                               onchange="this.form.submit()">
+                    </label>
+
+                </form>
+
+            </div>
+
+
+            <!-- Search and Filters -->
+
+            <form class="filters" method="get">
+
+                <div class="search">
+                    ⌕
+
+                    <input name="q"
+                           value="{{ search }}"
+                           placeholder="Search dealer, POD, phone or city...">
+                </div>
+
+
+                <select name="status">
+
+                    <option value="">All call statuses</option>
+
+                    {% for key, label in statuses %}
+
+                        <option value="{{ key }}"
+                            {% if status == key %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <button type="submit" class="btn primary">
+                    Filter
+                </button>
+
+                <a class="btn light" href="{% url 'dashboard' %}">
+                    Reset
+                </a>
+
+            </form>
+
+
+            <!-- Dealer Table -->
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>DEALER</th>
+                            <th>POD / CITY</th>
+                            <th>CONTACT</th>
+                            <th>CALL STATUS</th>
+                            <th>LAST CALLED</th>
+                            <th>UPDATE CALL</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for d in dealers %}
+
+                        <tr>
+
+                            <td>
+                                <div class="dealer">
+
+                                    <div class="dealer-avatar">
+                                        {{ d.dealer_name|first|upper }}
+                                    </div>
+
+                                    <div>
+                                        <b>{{ d.dealer_name }}</b>
+                                        <small>
+                                            {{ d.dealer_code|default:"Dealer" }}
+                                        </small>
+                                    </div>
+
+                                </div>
+                            </td>
+
+
+                            <td>
+                                <b>{{ d.pod_number|default:"—" }}</b>
+
+                                <small class="block">
+                                    {{ d.city|default:"—" }}
+                                </small>
+                            </td>
+
+
+                            <td>
+                                <div class="contact-info">
+
+                                    <span class="phone-icon">☎</span>
+
+                                    {% if d.phone %}
+
+                                        <a href="tel:{{ d.phone }}"
+                                           class="phone-number">
+                                            {{ d.phone }}
+                                        </a>
+
+                                    {% else %}
+
+                                        <span class="muted">
+                                            Number not available
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+                            </td>
+
+
+                            <td>
+                                <span class="badge {{ d.call_status }}">
+                                    {{ d.get_call_status_display }}
+                                </span>
+                            </td>
+
+
+                            <td>
+
+                                {% if d.called_at %}
+
+                                    {{ d.called_at|date:"d M, H:i" }}
+
+                                {% else %}
+
+                                    <span class="muted">Not called</span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td>
+
+                                <form method="post"
+                                      action="{% url 'update_call' d.id %}"
+                                      class="update-form">
+
+                                    {% csrf_token %}
+
+                                    <select name="call_status"
+                                            aria-label="Call status">
+
+                                        {% for key, label in statuses %}
+
+                                            <option value="{{ key }}"
+                                                {% if d.call_status == key %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+
+                                    <input name="remarks"
+                                           placeholder="Remark (optional)"
+                                           value="{{ d.remarks|default:'' }}">
+
+
+                                    <button class="btn tiny primary"
+                                            type="submit">
+                                        Save
+                                    </button>
+
+                                </form>
+
+
+                                <!-- Schedule Follow-up Button -->
+
+                                <a href="{% url 'schedule_followup' d.id %}"
+                                   class="btn tiny light">
+                                    + Schedule Follow-up
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="6" class="empty">
+                                No dealer records found.
+                                Import an Excel sheet to get started.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="table-foot">
+
+                Showing {{ dealers|length }} matching
+                record{{ dealers|length|pluralize }}
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            GoldCoin Dealer Operations
+            <span>Internal calling tracker · Django</span>
+        </footer>
+
+    </main>
+
+</body>
+</html>

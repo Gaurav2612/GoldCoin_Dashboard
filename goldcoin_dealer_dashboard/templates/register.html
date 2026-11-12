@@ -1,0 +1,99 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldCoin | Dealer Registration</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</head>
+
+<body class="registration-page">
+
+<div class="auth-wrapper">
+
+    <!-- Brand Section -->
+    <div class="auth-brand">
+        <div class="brand-icon">GC</div>
+        <span>GoldCoin</span>
+    </div>
+
+    <!-- Registration Card -->
+    <div class="auth-card">
+
+        <div class="auth-header">
+            <div class="auth-badge">
+                <span class="badge-dot"></span>
+                DEALER PORTAL
+            </div>
+
+            <h1>Create Your Account</h1>
+
+            <p>
+                Join GoldCoin Dealer Operations and manage
+                your business efficiently.
+            </p>
+        </div>
+
+        <form method="post" class="registration-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-group">
+
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label>
+
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <small>{{ field.help_text|safe }}</small>
+                    {% endif %}
+
+                    {% if field.errors %}
+                        <div class="field-error">
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
+
+                </div>
+            {% endfor %}
+
+            <button type="submit" class="register-btn">
+                Create Account
+                <span>→</span>
+            </button>
+
+        </form>
+
+        <div class="auth-divider">
+            <span>Already a member?</span>
+        </div>
+
+        <a href="{% url 'login' %}" class="login-btn">
+            Sign In to Your Account
+        </a>
+
+    </div>
+
+    <div class="auth-footer">
+        <span>© 2026 GoldCoin Dealer Operations</span>
+        <span>Secure Dealer Management Portal</span>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,229 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>GoldCoin | Dealer Login</title>
+
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+</head>
+
+<body class="auth-page">
+
+<div class="login-wrapper">
+
+    <!-- LEFT BRANDING -->
+    <section class="login-brand">
+
+        <div class="brand-logo">
+            <div class="brand-icon">GC</div>
+
+            <div class="brand-name">
+                <h1>GoldCoin</h1>
+                <span>DEALER OPERATIONS</span>
+            </div>
+        </div>
+
+        <div class="brand-content">
+
+            <span class="brand-tag">
+                CONNECT • TRACK • GROW
+            </span>
+
+            <h2>
+                Smarter Dealer<br>
+                <span>Management.</span>
+            </h2>
+
+            <p>
+                Manage dealer relationships, track calling activities,
+                monitor follow-ups and grow your business from one
+                powerful workspace.
+            </p>
+
+            <div class="brand-features">
+                <div><span>✓</span> Dealer Management</div>
+                <div><span>✓</span> Calling Performance</div>
+                <div><span>✓</span> Follow-up Tracking</div>
+            </div>
+
+        </div>
+
+        <div class="brand-bottom">
+            <span class="gold-line"></span>
+            <p>GOLDCOIN DEALER OPERATIONS</p>
+        </div>
+
+        <!-- Decorative Background -->
+        <div class="gold-circle circle-one"></div>
+        <div class="gold-circle circle-two"></div>
+
+    </section>
+
+
+    <!-- RIGHT LOGIN -->
+    <section class="login-section">
+
+        <div class="login-card">
+
+            <div class="login-icon">
+                <span>♙</span>
+            </div>
+
+            <div class="welcome-label">
+                WELCOME BACK
+            </div>
+
+            <h2>Sign in to your account</h2>
+
+            <p class="login-subtitle">
+                Enter your credentials to continue to your dashboard.
+            </p>
+
+            <!-- Django Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if form.errors %}
+                <div class="alert error">
+                    Invalid username or password. Please try again.
+                </div>
+            {% endif %}
+
+            <!-- LOGIN FORM -->
+            <form method="post" class="login-form">
+
+                {% csrf_token %}
+
+                <!-- Username -->
+                <div class="form-group">
+
+                    <label for="id_username">
+                        Username
+                    </label>
+
+                    <div class="input-box">
+
+                        <span class="input-icon">♙</span>
+
+                        <input
+                            type="text"
+                            name="username"
+                            id="id_username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            autofocus
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+
+                    <label for="id_password">
+                        Password
+                    </label>
+
+                    <div class="input-box">
+
+                        <span class="input-icon">♙</span>
+
+                        <input
+                            type="password"
+                            name="password"
+                            id="id_password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            onclick="togglePassword()"
+                            aria-label="Show or hide password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+                {% if next %}
+                    <input type="hidden" name="next" value="{{ next }}">
+                {% endif %}
+
+                <!-- Login Button -->
+                <button type="submit" class="login-btn">
+
+                    <span>Login to Dashboard</span>
+
+                    <span class="login-arrow">→</span>
+
+                </button>
+
+            </form>
+
+            <!-- Divider -->
+            <div class="login-divider">
+                <span>SECURE ACCESS</span>
+            </div>
+
+            <!-- Registration -->
+            <div class="register-text">
+
+                Don't have an account?
+
+                <a href="{% url 'register' %}">
+                    Register Now →
+                </a>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="login-bottom">
+
+                <span class="security-dot"></span>
+
+                Secure Dealer Operations Portal
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<script>
+function togglePassword() {
+    const password = document.getElementById("id_password");
+    const button = document.querySelector(".password-toggle");
+
+    if (password.type === "password") {
+        password.type = "text";
+        button.textContent = "Hide";
+    } else {
+        password.type = "password";
+        button.textContent = "Show";
+    }
+}
+</script>
+
+</body>
+</html>
