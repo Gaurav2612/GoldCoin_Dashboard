@@ -1,0 +1,1158 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoldCoin | Dealer POD Tracking</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #172435;
+            --navy-light: #22364d;
+            --gold: #c49a45;
+            --gold-light: #f5ead0;
+            --gold-dark: #98712d;
+            --background: #f5f3ed;
+            --surface: #ffffff;
+            --text: #263445;
+            --muted: #7c8795;
+            --border: #e9e7e0;
+            --green: #16845b;
+            --green-bg: #e3f4eb;
+            --red: #c44949;
+            --red-bg: #fceaea;
+            --blue: #3d6fa7;
+            --blue-bg: #eaf1fa;
+            --purple: #7653a5;
+            --purple-bg: #f0eafa;
+            --orange: #b97728;
+            --orange-bg: #fff1dd;
+            --shadow: 0 5px 22px rgba(28, 39, 52, 0.045);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px;
+            background: var(--background);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+        }
+
+        .page-container {
+            max-width: 1900px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--navy);
+            color: var(--gold);
+            font-size: 24px;
+            box-shadow: 0 5px 15px rgba(23, 36, 53, .14);
+        }
+
+        .header-title h1 {
+            margin: 0;
+            color: var(--navy);
+            font-family: 'Manrope', sans-serif;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -.7px;
+        }
+
+        .header-title p {
+            margin: 5px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .header-tag {
+            padding: 9px 15px;
+            border: 1px solid #e5d8b9;
+            border-radius: 30px;
+            background: #fffaf0;
+            color: var(--gold-dark);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .7px;
+            text-transform: uppercase;
+        }
+
+        /* MESSAGES */
+
+        .messages {
+            padding: 14px 17px;
+            margin: 0 0 20px;
+            border: 1px solid #bde5cf;
+            border-left: 4px solid var(--green);
+            border-radius: 10px;
+            background: #effaf3;
+            color: #17643e;
+            font-weight: 600;
+        }
+
+        .messages.error {
+            border-color: #f2c4c4;
+            border-left-color: var(--red);
+            background: #fff1f1;
+            color: #a52e2e;
+        }
+
+        /* TOOLBAR */
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 11px;
+            padding: 18px;
+            margin-bottom: 22px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .toolbar form {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        input,
+        select,
+        button,
+        .btn {
+            min-height: 40px;
+            padding: 10px 13px;
+            border: 1px solid #e0e3e8;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 12px;
+            transition: all .2s ease;
+        }
+
+        input,
+        select {
+            background: #fff;
+            color: var(--text);
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(196, 154, 69, .12);
+        }
+
+        input[type="file"] {
+            max-width: 260px;
+            background: #fafafa;
+        }
+
+        button,
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            border: 1px solid var(--navy);
+            background: var(--navy);
+            color: white;
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        button:hover,
+        .btn:hover {
+            border-color: var(--gold-dark);
+            background: var(--gold-dark);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .btn-gold {
+            border-color: var(--gold);
+            background: var(--gold);
+            color: #fff;
+        }
+
+        .btn-light {
+            border-color: #e6e2d8;
+            background: #faf9f6;
+            color: var(--navy);
+        }
+
+        /* SUMMARY */
+
+        .section-heading {
+            margin: 0 0 14px;
+            color: var(--navy);
+            font-family: 'Manrope', sans-serif;
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 120px;
+            padding: 19px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .summary-card::after {
+            position: absolute;
+            right: -20px;
+            bottom: -30px;
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: rgba(196, 154, 69, .07);
+            content: "";
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .summary-card h4 {
+            margin: 0;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .card-icon {
+            width: 31px;
+            height: 31px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9px;
+            background: var(--gold-light);
+            color: var(--gold-dark);
+            font-size: 15px;
+        }
+
+        .summary-card .number {
+            margin-top: 13px;
+            color: var(--navy);
+            font-family: 'Manrope', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .summary-card.complete .card-icon {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .summary-card.complete .number {
+            color: var(--green);
+        }
+
+        .summary-card.pending .card-icon {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .summary-card.pending .number {
+            color: var(--red);
+        }
+
+        .summary-card.signed .card-icon {
+            background: var(--blue-bg);
+            color: var(--blue);
+        }
+
+        .summary-card.stamped .card-icon {
+            background: var(--purple-bg);
+            color: var(--purple);
+        }
+
+        .summary-card.dated .card-icon {
+            background: var(--orange-bg);
+            color: var(--orange);
+        }
+
+        /* FILTER PANEL */
+
+        .filter-panel {
+            padding: 21px;
+            margin-bottom: 21px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .filter-heading {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 16px;
+            color: var(--navy);
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .filter-heading span {
+            color: var(--gold-dark);
+            font-size: 17px;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: 1.5fr repeat(4, 1fr) auto auto;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filters input,
+        .filters select {
+            width: 100%;
+            min-width: 0;
+            height: 43px;
+            background: #fbfbfa;
+        }
+
+        .filters button,
+        .filters .btn {
+            height: 43px;
+        }
+
+        /* RECORD COUNT */
+
+        .record-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 23px 0 13px;
+        }
+
+        .record-count {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .record-count strong {
+            color: var(--navy);
+            font-size: 15px;
+        }
+
+        .record-label {
+            padding: 6px 11px;
+            border-radius: 20px;
+            background: var(--gold-light);
+            color: var(--gold-dark);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* TABLE */
+
+        .table-container {
+            overflow: auto;
+            max-height: 72vh;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        table {
+            width: 100%;
+            min-width: 2300px;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        th,
+        td {
+            padding: 13px 12px;
+            border-bottom: 1px solid #eeece7;
+            text-align: left;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: var(--navy);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .35px;
+            text-transform: uppercase;
+        }
+
+        th:first-child {
+            border-radius: 12px 0 0 0;
+        }
+
+        tbody tr {
+            background: #fff;
+            transition: background .15s ease;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #fcfbf8;
+        }
+
+        tbody tr:hover {
+            background: #fff9ec;
+        }
+
+        td {
+            color: #465365;
+        }
+
+        td:nth-child(4),
+        td:nth-child(9) {
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        td input {
+            width: 120px;
+            min-height: 35px;
+            padding: 7px 9px;
+            border: 1px solid #e5e6e8;
+            border-radius: 6px;
+            background: #fff;
+            font-size: 12px;
+        }
+
+        td input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(196, 154, 69, .10);
+            outline: none;
+        }
+
+        td input[name="remarks"],
+        td input[name="depots_remark"] {
+            width: 170px;
+        }
+
+        /* STATUS BADGES */
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 75px;
+            padding: 6px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .2px;
+        }
+
+        .status-complete {
+            background: var(--green-bg);
+            color: var(--green);
+        }
+
+        .status-pending {
+            background: var(--red-bg);
+            color: var(--red);
+        }
+
+        .status-na {
+            background: #f0f1f3;
+            color: #687385;
+        }
+
+        /* SAVE */
+
+        .save-btn {
+            min-height: 34px;
+            padding: 8px 15px;
+            border-color: var(--green);
+            border-radius: 7px;
+            background: var(--green);
+            color: white;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .save-btn:hover {
+            border-color: #116a47;
+            background: #116a47;
+        }
+
+        .empty {
+            padding: 55px 20px;
+            color: var(--muted);
+            font-size: 14px;
+            text-align: center;
+        }
+
+        /* PAGINATION */
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 20px 0;
+        }
+
+        .pagination a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            min-height: 37px;
+            padding: 8px 13px;
+            border: 1px solid #e3dfd4;
+            border-radius: 8px;
+            background: white;
+            color: var(--navy);
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: .2s;
+        }
+
+        .pagination a:hover:not(.disabled) {
+            border-color: var(--gold);
+            background: var(--gold);
+            color: white;
+        }
+
+        .pagination .disabled {
+            background: #f1f1ef;
+            color: #a3a8b0;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .current-page {
+            padding: 9px 14px;
+            border-radius: 8px;
+            background: var(--navy);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .footer-note {
+            padding: 15px 0 5px;
+            color: #9299a3;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1450px) {
+            .summary-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .filters {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 850px) {
+            body {
+                padding: 18px;
+            }
+
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .filters {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .filter-search {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 12px;
+            }
+
+            .header-title h1 {
+                font-size: 20px;
+            }
+
+            .header-icon {
+                width: 44px;
+                height: 44px;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 9px;
+            }
+
+            .summary-card {
+                min-height: 105px;
+                padding: 13px;
+            }
+
+            .summary-card h4 {
+                font-size: 10px;
+            }
+
+            .summary-card .number {
+                font-size: 23px;
+            }
+
+            .toolbar {
+                align-items: stretch;
+                padding: 13px;
+            }
+
+            .toolbar form {
+                width: 100%;
+            }
+
+            .toolbar form input[type="file"] {
+                width: 100%;
+                max-width: none;
+            }
+
+            .toolbar button,
+            .toolbar .btn {
+                width: 100%;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-search {
+                grid-column: auto;
+            }
+
+            .filter-panel {
+                padding: 15px;
+            }
+
+            .record-bar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .pagination {
+                gap: 5px;
+            }
+
+            .pagination a {
+                min-width: 34px;
+                padding: 7px 9px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <!-- PAGE HEADER -->
+
+    <header class="page-header">
+
+        <div class="header-title">
+            <div class="header-icon">◆</div>
+
+            <div>
+                <h1>Dealer POD Tracking</h1>
+                <p>GoldCoin document verification and tracking management</p>
+            </div>
+        </div>
+
+        <div class="header-tag">
+            GoldCoin Management System
+        </div>
+
+    </header>
+
+    <!-- DJANGO MESSAGES -->
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="messages {% if message.tags == 'error' %}error{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- IMPORT / EXPORT TOOLBAR -->
+
+    <div class="toolbar">
+
+        <form method="POST"
+              action="{% url 'import_pod_excel' %}"
+              enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <input type="file"
+                   name="excel_file"
+                   accept=".xlsx,.xlsm"
+                   required>
+
+            <button type="submit" class="btn-gold">
+                ↑ Import Excel
+            </button>
+
+        </form>
+
+        <a class="btn" href="{% url 'export_pod_excel' %}">
+            ↓ Export POD Excel
+        </a>
+
+        <a class="btn btn-light" href="{% url 'dashboard' %}">
+            ← Dealer Calling Dashboard
+        </a>
+
+    </div>
+
+    <!-- SUMMARY CARDS -->
+
+    <h3 class="section-heading">POD Document Overview</h3>
+
+    <div class="summary-grid">
+
+        <div class="summary-card">
+            <div class="card-top">
+                <h4>Total Documents</h4>
+                <span class="card-icon">▤</span>
+            </div>
+            <div class="number">{{ total_pods|default:0 }}</div>
+        </div>
+
+        <div class="summary-card complete">
+            <div class="card-top">
+                <h4>Completed Documents</h4>
+                <span class="card-icon">✓</span>
+            </div>
+            <div class="number">{{ complete_pods|default:0 }}</div>
+        </div>
+
+        <div class="summary-card pending">
+            <div class="card-top">
+                <h4>Pending Documents</h4>
+                <span class="card-icon">◷</span>
+            </div>
+            <div class="number">{{ pending_pods|default:0 }}</div>
+        </div>
+
+        <div class="summary-card signed">
+            <div class="card-top">
+                <h4>Signed Documents</h4>
+                <span class="card-icon">✎</span>
+            </div>
+            <div class="number">{{ signed_pods|default:0 }}</div>
+        </div>
+
+        <div class="summary-card stamped">
+            <div class="card-top">
+                <h4>Stamped Documents</h4>
+                <span class="card-icon">▣</span>
+            </div>
+            <div class="number">{{ stamped_pods|default:0 }}</div>
+        </div>
+
+        <div class="summary-card dated">
+            <div class="card-top">
+                <h4>Dated Documents</h4>
+                <span class="card-icon">▦</span>
+            </div>
+            <div class="number">{{ dated_pods|default:0 }}</div>
+        </div>
+
+    </div>
+
+    <!-- SEARCH AND FILTER -->
+
+    <div class="filter-panel">
+
+        <div class="filter-heading">
+            <span>⌕</span>
+            Search and Filter POD Records
+        </div>
+
+        <form method="GET" class="filters">
+
+            <input class="filter-search"
+                   type="text"
+                   name="search"
+                   placeholder="Search Dealer / Document"
+                   value="{{ request.GET.search|default:'' }}">
+
+            <select name="scheme">
+                <option value="">All Schemes</option>
+
+                {% for item in schemes %}
+                    <option value="{{ item }}"
+                        {% if request.GET.scheme == item %}selected{% endif %}>
+                        {{ item }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="month">
+                <option value="">All Months</option>
+
+                {% for item in months %}
+                    <option value="{{ item }}"
+                        {% if request.GET.month == item %}selected{% endif %}>
+                        {{ item }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="location">
+                <option value="">All Locations</option>
+
+                {% for item in locations %}
+                    <option value="{{ item }}"
+                        {% if request.GET.location == item %}selected{% endif %}>
+                        {{ item }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <select name="document_status">
+
+                <option value="">All Document Status</option>
+
+                <option value="complete"
+                    {% if request.GET.document_status == "complete" %}selected{% endif %}>
+                    Complete
+                </option>
+
+                <option value="pending_sign"
+                    {% if request.GET.document_status == "pending_sign" %}selected{% endif %}>
+                    Pending Sign
+                </option>
+
+                <option value="pending_stamp"
+                    {% if request.GET.document_status == "pending_stamp" %}selected{% endif %}>
+                    Pending Stamp
+                </option>
+
+                <option value="pending_date"
+                    {% if request.GET.document_status == "pending_date" %}selected{% endif %}>
+                    Pending Date
+                </option>
+
+                <option value="pending"
+                    {% if request.GET.document_status == "pending" %}selected{% endif %}>
+                    Incomplete Documents
+                </option>
+
+            </select>
+
+            <button type="submit" class="btn-gold">
+                Search / Filter
+            </button>
+
+            <a class="btn btn-light" href="{% url 'pod_tracking' %}">
+                Reset
+            </a>
+
+        </form>
+
+    </div>
+
+    <!-- RECORD COUNT -->
+
+    <div class="record-bar">
+
+        <div class="record-count">
+            Total POD Records:
+            <strong>{{ total_pods|default:0 }}</strong>
+        </div>
+
+        <span class="record-label">
+            DOCUMENT TRACKING
+        </span>
+
+    </div>
+
+    <!-- POD TRACKING TABLE -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>Scheme</th>
+                    <th>Location Code</th>
+                    <th>Document No.</th>
+                    <th>Posting Date</th>
+                    <th>Month</th>
+                    <th>Dealer Code</th>
+                    <th>Group Code</th>
+                    <th>Dealer Name</th>
+                    <th>Location Name</th>
+                    <th>Sales In Charge</th>
+                    <th>Quarterly Wise</th>
+                    <th>Qty</th>
+                    <th>Received from Yokohama</th>
+                    <th>Audited by Cofiser</th>
+                    <th>Sign</th>
+                    <th>Sign Status</th>
+                    <th>Stamp</th>
+                    <th>Stamp Status</th>
+                    <th>Date</th>
+                    <th>Date Status</th>
+                    <th>Document Status</th>
+                    <th>Remarks</th>
+                    <th>Depot's Remark</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for pod in records %}
+
+                <tr>
+
+                    <td>{{ pod.sr_no|default:"-" }}</td>
+                    <td>{{ pod.scheme_period|default:"-" }}</td>
+                    <td>{{ pod.location_code|default:"-" }}</td>
+                    <td>{{ pod.document_no|default:"-" }}</td>
+                    <td>{{ pod.posting_date|date:"d-m-Y"|default:"-" }}</td>
+                    <td>{{ pod.month|default:"-" }}</td>
+                    <td>{{ pod.dealer_code|default:"-" }}</td>
+                    <td>{{ pod.group_code|default:"-" }}</td>
+                    <td>{{ pod.dealer_name|default:"-" }}</td>
+                    <td>{{ pod.location_name|default:"-" }}</td>
+                    <td>{{ pod.sales_in_charge|default:"-" }}</td>
+                    <td>{{ pod.quarterly_wise|default:"-" }}</td>
+                    <td>{{ pod.qty|default:"-" }}</td>
+
+                    <td>
+                        <input form="pod-form-{{ pod.pk }}"
+                               name="received_from_yokohama"
+                               value="{{ pod.received_from_yokohama|default:'' }}">
+                    </td>
+
+                    <td>
+                        <input form="pod-form-{{ pod.pk }}"
+                               name="audited_by_cofiser"
+                               value="{{ pod.audited_by_cofiser|default:'' }}">
+                    </td>
+
+                    <td>
+                        <input form="pod-form-{{ pod.pk }}"
+                               name="sign"
+                               value="{{ pod.sign|default:'' }}"
+                               placeholder="Yes / No">
+                    </td>
+
+                    <td>
+                        {% if pod.is_signed %}
+                            <span class="status-badge status-complete">Signed</span>
+                        {% else %}
+                            <span class="status-badge status-pending">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <input form="pod-form-{{ pod.pk }}"
+                               name="stamp"
+                               value="{{ pod.stamp|default:'' }}"
+                               placeholder="Yes / No">
+                    </td>
+
+                    <td>
+                        {% if pod.is_stamped %}
+                            <span class="status-badge status-complete">Stamped</span>
+                        {% else %}
+                            <span class="status-badge status-pending">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <input form="pod-form-{{ pod.pk }}"
+                               type="date"
+                               name="date"
+                               value="{{ pod.date|date:'Y-m-d' }}">
+                    </td>
+
+                    <td>
+                        {% if pod.is_dated %}
+                            <span class="status-badge status-complete">Dated</span>
+                        {% else %}
+                            <span class="status-badge status-pending">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if pod.document_complete %}
+                            <span class="status-badge status-complete">Complete</span>
+                        {% else %}
+                            <span class="status-badge status-pending">Pending</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <input form="pod-form-{{ pod.pk }}"
+                               name="remarks"
+                               value="{{ pod.remarks|default:'' }}">
+                    </td>
+
+                    <td>
+                        <input form="pod-form-{{ pod.pk }}"
+                               name="depots_remark"
+                               value="{{ pod.depots_remark|default:'' }}">
+                    </td>
+
+                    <td>
+                        <form id="pod-form-{{ pod.pk }}"
+                              method="POST"
+                              action="{% url 'update_pod' pod.pk %}">
+
+                            {% csrf_token %}
+
+                            <button type="submit" class="save-btn">
+                                ✓ Save
+                            </button>
+
+                        </form>
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="25" class="empty">
+                        No POD records found. Try changing your search filters.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- PAGINATION -->
+
+    <div class="pagination">
+
+        {% if page_obj.has_previous %}
+
+            <a href="?{% for key,value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&amp;{% endif %}{% endfor %}page=1">
+                First
+            </a>
+
+            <a href="?{% for key,value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&amp;{% endif %}{% endfor %}page={{ page_obj.previous_page_number }}">
+                Previous
+            </a>
+
+        {% else %}
+
+            <a class="disabled">First</a>
+            <a class="disabled">Previous</a>
+
+        {% endif %}
+
+        <span class="current-page">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+
+            <a href="?{% for key,value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&amp;{% endif %}{% endfor %}page={{ page_obj.next_page_number }}">
+                Next
+            </a>
+
+            <a href="?{% for key,value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value|urlencode }}&amp;{% endif %}{% endfor %}page={{ page_obj.paginator.num_pages }}">
+                Last
+            </a>
+
+        {% else %}
+
+            <a class="disabled">Next</a>
+            <a class="disabled">Last</a>
+
+        {% endif %}
+
+    </div>
+
+    <div class="footer-note">
+        GoldCoin Dealer Management System · POD Tracking
+    </div>
+
+</div>
+
+</body>
+</html>

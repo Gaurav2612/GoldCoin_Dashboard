@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}GoldCoin CRM{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'style.css' %}?v=21">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <div class="app-layout">
+
+        <aside class="sidebar">
+
+            <div class="logo">
+                <span class="logo-icon">GC</span>
+                <span class="logo-text">
+                    GoldCoin
+                    <small>DEALER OPERATIONS</small>
+                </span>
+            </div>
+
+            <div class="sidebar-label">WORKSPACE</div>
+
+            <div class="nav active">
+                <a href="{% url 'dashboard' %}">
+                    <span class="nav-icon">▦</span>
+                    <span>Calling Dashboard</span>
+                </a>
+            </div>
+
+            <div class="nav">
+                <a href="{% url 'dealer_followups' %}">
+                    <span class="nav-icon">☎</span>
+                    <span>Dealer Follow-ups</span>
+                </a>
+            </div>
+
+            <div class="nav">
+                <a href="{% url 'pod_tracking' %}">
+                    <span class="nav-icon">▤</span>
+                    <span>POD Tracking</span>
+                </a>
+            </div>
+
+            <div class="sidebar-spacer"></div>
+
+            <div class="sidebar-bottom">
+
+                <div class="avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <div class="profile-info">
+                    <b>{{ request.user.username }}</b>
+                    <small>Operations team</small>
+                </div>
+
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="logout" type="submit" title="Logout">↗</button>
+                </form>
+
+            </div>
+
+        </aside>
+
+        <main class="main">
+
+            <header class="topbar">
+
+                <div class="topbar-content">
+                    <div class="eyebrow">DEALER OPERATIONS / OVERVIEW</div>
+
+                    <h1>
+                        {% block page_heading %}
+                        GoldCoin Dealer Calling Dashboard
+                        {% endblock %}
+                    </h1>
+
+                    <p class="sub">
+                        {% block page_subtitle %}
+                        Complete dealer register, POD tracking and calling remarks.
+                        {% endblock %}
+                    </p>
+                </div>
+
+                <div class="header-actions">
+
+                    <span class="live">
+                        <i></i>
+                        Live workspace
+                    </span>
+
+                    <a class="btn light" href="{% url 'export_excel' %}">
+                        ↓ Export 24 Columns
+                    </a>
+
+                    <a class="btn primary" href="{% url 'export_calling_summary' %}">
+                        📊 Calling Summary
+                    </a>
+
+                </div>
+
+            </header>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% block content %}{% endblock %}
+
+            <footer class="app-footer">
+                <span>GoldCoin Dealer Operations</span>
+                <span>Internal calling tracker · Django CRM</span>
+            </footer>
+
+        </main>
+
+    </div>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>
